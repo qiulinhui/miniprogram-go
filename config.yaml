@@ -1,0 +1,11 @@
+app:
+  port: 8080
+db:
+  hostname: "127.0.0.1"
+  database: "books"
+  username: "books"
+  password: "XKMLkcpB2LazRTdd"
+  port: 3306
+  charset: "utf8mb4"
+jwt:
+  identityKey:"id"
