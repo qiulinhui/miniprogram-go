@@ -12,7 +12,7 @@ type BookController struct {
 
 var bookModel model.Book
 
-func (ctr *BookController) Create(c *gin.Context) {
+func (*BookController) Create(c *gin.Context) {
 	name := c.Query("name")
 	author := c.Query("author")
 	bookModel.Name = name
@@ -27,11 +27,11 @@ func (ctr *BookController) Create(c *gin.Context) {
 	})
 }
 
-func (ctr *BookController) Update(c *gin.Context) {
+func (*BookController) Update(c *gin.Context) {
 
 }
 
-func (ctr *BookController) Delete(c *gin.Context) {
+func (*BookController) Delete(c *gin.Context) {
 
 }
 

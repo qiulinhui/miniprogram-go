@@ -1,5 +1,5 @@
 app:
-  port: 8080
+  port: 80
 db:
   hostname: "127.0.0.1"
   database: "books"
@@ -8,4 +8,10 @@ db:
   port: 3306
   charset: "utf8mb4"
 jwt:
-  identityKey:"id"
+  realm: "app"
+  key: "secret key"
+
+# 小程序
+miniprogram:
+  appid: "wx59511f005ad46d8b"
+  appsecret: "dfe491108ea9b8299a26541080aa366f"

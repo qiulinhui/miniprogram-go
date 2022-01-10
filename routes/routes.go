@@ -2,35 +2,42 @@ package routes
 
 import (
 	"bookstore/app/controllers"
-	"bookstore/lib"
+	"bookstore/app/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Register(r *gin.Engine) {
+
 	r.NoRoute(func(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{
 			"msg": "notfound",
 		})
 	})
-	r.POST("/login", lib.JWT().LoginHandler)
-	// e, err := casbin.NewEnforcer("authz_model.conf", "authz_policy.csv")
-
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
-	// r.Use(authz.NewAuthorizer(e))
-	auth := r.Group("/auth")
-	auth.Use(lib.JWT().MiddlewareFunc())
-	{
-		auth.GET("/refresh_token", lib.JWT().RefreshHandler)
+	type controller struct {
+		Book *controllers.BookController
+		User *controllers.UserController
 	}
-	auth.GET("/hello", controllers.HelloHandler).Use(lib.JWT().MiddlewareFunc())
+	var c controller
+	jwt := middleware.JwtMiddleware()
+	r.POST("/login", jwt.LoginHandler) // 授权登录
 
-	var bookController *controllers.BookController
-	r.GET("/book/:id", bookController.Get)
-	r.PATCH("/book", bookController.Update)
-	r.DELETE("/book/:id", bookController.Delete)
-	r.POST("/books/create", bookController.Create)
+	auth := r.Group("/auth")
+	auth.GET("/refresh_token", jwt.RefreshHandler) // 刷新令牌
+	auth.Use(jwt.MiddlewareFunc())
+
+	user := r.Group("/user")
+	user.Use(jwt.MiddlewareFunc())
+	{
+		user.GET("/hello", c.User.Hello)
+	}
+
+	book := r.Group("/book")
+	{
+		book.GET("/book/:id", c.Book.Get)
+		book.PATCH("/book", c.Book.Update)
+		book.DELETE("/book/:id", c.Book.Delete)
+		book.POST("/books/create", c.Book.Create)
+	}
 }
