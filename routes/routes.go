@@ -22,10 +22,10 @@ func Register(r *gin.Engine) {
 	var c controller
 	jwt := middleware.JwtMiddleware()
 	r.POST("/login", jwt.LoginHandler) // 授权登录
-
 	auth := r.Group("/auth")
-	auth.GET("/refresh_token", jwt.RefreshHandler) // 刷新令牌
 	auth.Use(jwt.MiddlewareFunc())
+	auth.GET("/refresh_token", jwt.RefreshHandler) // 刷新令牌
+	auth.GET("/logout", jwt.LogoutHandler)         // 退出登录
 
 	user := r.Group("/user")
 	user.Use(jwt.MiddlewareFunc())

@@ -18,4 +18,5 @@ func SetUpDB() {
 	sqlDB.SetMaxIdleConns(config.GetInt("db.mysql.max_idle_connections"))
 	// 设置每个链接的过期时间
 	sqlDB.SetConnMaxLifetime(time.Duration(config.GetInt("db.mysql.max_life_seconds")) * time.Second)
+	model.ConnectRedis()
 }

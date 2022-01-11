@@ -2,13 +2,19 @@ package model
 
 import (
 	"bookstore/config"
+	"context"
 	"fmt"
 
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var (
+	DB  *gorm.DB
+	RDB *redis.Client
+	Ctx = context.Background()
+)
 
 func ConnectDB() *gorm.DB {
 	var err error
@@ -30,4 +36,12 @@ func ConnectDB() *gorm.DB {
 		panic("数据库连接失败：" + err.Error())
 	}
 	return DB
+}
+
+func ConnectRedis() {
+	RDB = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
 }
