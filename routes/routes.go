@@ -21,6 +21,7 @@ func Register(r *gin.Engine) {
 	}
 	var c controller
 	jwt := middleware.JwtMiddleware()
+	authz := middleware.AuthzMiddleware()
 	r.POST("/login", jwt.LoginHandler) // 授权登录
 	auth := r.Group("/auth")
 	auth.Use(jwt.MiddlewareFunc())
@@ -32,6 +33,9 @@ func Register(r *gin.Engine) {
 	{
 		user.GET("/hello", c.User.Hello)
 	}
+
+	admin := r.Group("/admin")
+	admin.Use(authz)
 
 	book := r.Group("/book")
 	{
