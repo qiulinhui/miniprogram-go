@@ -22,6 +22,7 @@ func Register(r *gin.Engine) {
 	var c controller
 	jwt := middlewares.JwtMiddleware()
 	authz := middlewares.AuthzMiddleware()
+	r.Use(middlewares.LogMiddleware())
 	r.POST("/login", jwt.LoginHandler) // 授权登录
 	auth := r.Group("/auth")
 	auth.Use(jwt.MiddlewareFunc())
