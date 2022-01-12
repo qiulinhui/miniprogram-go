@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"bookstore/routes"
+	"app/routes"
 
 	"github.com/gin-gonic/gin"
 )

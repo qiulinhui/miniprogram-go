@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"bookstore/config"
+	"app/config"
 	"fmt"
 )
 

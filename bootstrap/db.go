@@ -1,14 +1,14 @@
 package bootstrap
 
 import (
-	"bookstore/config"
-	"bookstore/model"
+	"app/config"
+	"app/models"
 	"time"
 )
 
 func SetUpDB() {
 	// 建立数据库连接池
-	db := model.ConnectDB()
+	db := models.ConnectDB()
 
 	sqlDB, _ := db.DB()
 
@@ -18,5 +18,5 @@ func SetUpDB() {
 	sqlDB.SetMaxIdleConns(config.GetInt("db.mysql.max_idle_connections"))
 	// 设置每个链接的过期时间
 	sqlDB.SetConnMaxLifetime(time.Duration(config.GetInt("db.mysql.max_life_seconds")) * time.Second)
-	model.ConnectRedis()
+	models.ConnectRedis()
 }

@@ -1,7 +1,7 @@
-package model
+package models
 
 import (
-	"bookstore/config"
+	"app/config"
 	"context"
 	"fmt"
 

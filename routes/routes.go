@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"bookstore/app/controllers"
-	"bookstore/app/middleware"
+	"app/controllers"
+	"app/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +20,8 @@ func Register(r *gin.Engine) {
 		User *controllers.UserController
 	}
 	var c controller
-	jwt := middleware.JwtMiddleware()
-	authz := middleware.AuthzMiddleware()
+	jwt := middlewares.JwtMiddleware()
+	authz := middlewares.AuthzMiddleware()
 	r.POST("/login", jwt.LoginHandler) // 授权登录
 	auth := r.Group("/auth")
 	auth.Use(jwt.MiddlewareFunc())

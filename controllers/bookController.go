@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"bookstore/model"
+	"app/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 type BookController struct {
 }
 
-var bookModel model.Book
+var bookModel models.Book
 
 func (*BookController) Create(c *gin.Context) {
 	name := c.Query("name")

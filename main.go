@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bookstore/bootstrap"
+	"app/bootstrap"
 )
 
 func main() {

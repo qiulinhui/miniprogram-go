@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"bookstore/model"
+	"app/models"
 	"net/http"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -13,7 +13,7 @@ func HelloHandler(c *gin.Context) {
 	user, _ := c.Get("id")
 	c.JSON(http.StatusOK, gin.H{
 		"userID":   claims["id"],
-		"userName": user.(*model.User).Nickname,
+		"userName": user.(*models.User).Nickname,
 		"text":     "Hello World.",
 	})
 }

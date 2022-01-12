@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"bookstore/model"
+	"app/models"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ func (*UserController) Hello(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"userID": claims["id"],
-		"OpenId": user.(*model.User).Openid,
+		"OpenId": user.(*models.User).Openid,
 		"text":   "hello world",
 	})
 }

@@ -1,12 +1,11 @@
-package middleware
+package middlewares
 
 import (
-	"bookstore/config"
-	"fmt"
+	"app/models"
 	"log"
 
 	"github.com/casbin/casbin/v2"
-	casbinModel "github.com/casbin/casbin/v2/model"
+	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gin-contrib/authz"
 	"github.com/gin-gonic/gin"
@@ -14,16 +13,11 @@ import (
 )
 
 func AuthzMiddleware() gin.HandlerFunc {
-	adapter, err := gormadapter.NewAdapter("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-		config.GetString("db.username"),
-		config.GetString("db.password"),
-		config.GetString("db.hostname"),
-		config.GetString("db.port"),
-		config.GetString("db.database")), true)
+	adapter, err := gormadapter.NewAdapterByDB(models.DB)
 	if err != nil {
 		log.Fatalf("error: adapter: %s", err)
 	}
-	m, err := casbinModel.NewModelFromString(`
+	m, err := model.NewModelFromString(`
 	[request_definition]
 	r = sub, obj, act
 	[policy_definition]

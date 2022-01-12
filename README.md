@@ -12,21 +12,18 @@
 .
 
 
-├─ app web 目录
+├─ bootstrap   启动项
 
-│  ├─ controllers 控制器
+├─ config      配置文件加载
 
-│  └─ middleware 中间件
+├─ controllers 控制器
 
-├─ bootstrap 启动项
+├─ middlewares 中间件
 
-├─ config 配置文件加载
+├─ models      模型
 
-├─ ext 其他拓展
+├─ pkg         第三方包
 
-├─ model 模型类
-
-├─ routes 路由
+├─ routes      路由
 
 ├─ config.yaml 配置文件
-

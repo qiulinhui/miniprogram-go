@@ -1,9 +1,9 @@
-package middleware
+package middlewares
 
 import (
-	"bookstore/config"
-	"bookstore/ext"
-	"bookstore/model"
+	"app/config"
+	"app/models"
+	"app/pkg/wechat"
 	"log"
 	"net/http"
 	"strconv"
@@ -27,9 +27,10 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 				Code string `json:"code"`
 			}
 			params := Params{}
-			user := new(model.User)
+			user := new(models.User)
 			c.BindJSON(&params)
-			auth := ext.WeChat().GetMiniProgram(ext.MiniprogramCfg).GetAuth()
+
+			auth := wechat.WeChat.GetMiniProgram(wechat.MiniprogramCfg).GetAuth()
 			result, err := auth.Code2Session(params.Code)
 			if err != nil {
 				return nil, err
@@ -57,7 +58,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 
 		// 登录时调用，向webtoken添加其他有效数据
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*model.User); ok {
+			if v, ok := data.(*models.User); ok {
 				return jwt.MapClaims{"id": v.ID}
 			}
 			return jwt.MapClaims{}
@@ -68,12 +69,12 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			id := int(claims["id"].(float64))
-			token := model.RDB.Get(model.Ctx, "token_"+strconv.Itoa(id)).Val()
+			token := models.RDB.Get(models.Ctx, "token_"+strconv.Itoa(id)).Val()
 			if jwt.GetToken(c) != token {
 				return nil
 			}
-			user := new(model.User)
-			if model.DB.First(&user, claims["id"]).Error != nil {
+			user := new(models.User)
+			if models.DB.First(&user, claims["id"]).Error != nil {
 				return nil
 			}
 			return user
@@ -81,7 +82,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 		LoginResponse: func(c *gin.Context, code int, message string, times time.Time) {
 			user, exists := c.Get("user")
 			if exists {
-				err := model.RDB.Set(model.Ctx, "token_"+strconv.Itoa(int(user.(*model.User).ID)), message, time.Hour*(24*7-1)).Err()
+				err := models.RDB.Set(models.Ctx, "token_"+strconv.Itoa(int(user.(*models.User).ID)), message, time.Hour*(24*7-1)).Err()
 				if err != nil {
 					c.JSON(http.StatusBadRequest, gin.H{
 						"msg": "Redis服务异常，请稍后重试。",
@@ -102,7 +103,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 			claims := jwt.ExtractClaims(c)
 			id := int(claims["id"].(float64))
 			// 覆盖之前的令牌，保证同一时间只有一个令牌失效
-			err := model.RDB.Set(model.Ctx, "token_"+strconv.Itoa(id), message, time.Hour*(24*7-1)).Err()
+			err := models.RDB.Set(models.Ctx, "token_"+strconv.Itoa(id), message, time.Hour*(24*7-1)).Err()
 			if err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{
 					"msg": "Redis服务异常，请稍后重试。",
@@ -117,7 +118,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 		LogoutResponse: func(c *gin.Context, code int) {
 			claims := jwt.ExtractClaims(c)
 			id := int(claims["id"].(float64))
-			model.RDB.Del(model.Ctx, "token_"+strconv.Itoa(id))
+			models.RDB.Del(models.Ctx, "token_"+strconv.Itoa(id))
 			c.JSON(code, gin.H{
 				"code": code,
 				"msg":  "退出登录",
