@@ -2,8 +2,8 @@ app:
   port: 80
 db:
   hostname: "127.0.0.1"
-  database: "example_app"
-  username: "sail"
+  database: "app"
+  username: "root"
   password: "password"
   port: 3306
   charset: "utf8mb4"
@@ -13,5 +13,5 @@ jwt:
 
 # 小程序
 miniprogram:
-  appid: "wx59511f005ad46d8b"
-  appsecret: "dfe491108ea9b8299a26541080aa366f"
+  appid: ""
+  appsecret: ""
