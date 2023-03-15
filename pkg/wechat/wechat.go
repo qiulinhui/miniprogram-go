@@ -1,24 +1,22 @@
 package wechat
 
 import (
-	"app/config"
+	"app/app"
 
 	"github.com/silenceper/wechat/cache"
 	wechat "github.com/silenceper/wechat/v2"
 	wxConfig "github.com/silenceper/wechat/v2/miniprogram/config"
 )
 
-var (
-	MiniprogramCfg *wxConfig.Config
-	WeChat         *wechat.Wechat
-)
+func GetWechat() *wechat.Wechat {
+	return wechat.NewWechat()
+}
 
-func init() {
+func GetMiniprogramCfg() *wxConfig.Config {
 	var memory = cache.NewMemory()
-	MiniprogramCfg = &wxConfig.Config{
-		AppID:     config.GetString("miniprogram.appid"),
-		AppSecret: config.GetString("miniprogram.appsecret"),
+	return &wxConfig.Config{
+		AppID:     app.Config.GetString("miniprogram.appid"),
+		AppSecret: app.Config.GetString("miniprogram.appsecret"),
 		Cache:     memory,
 	}
-	WeChat = wechat.NewWechat()
 }

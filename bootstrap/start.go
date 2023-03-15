@@ -1,11 +1,11 @@
 package bootstrap
 
 import (
-	"app/config"
+	"app/app"
 	"fmt"
 )
 
-func Start() {
-	port := config.GetInt("app.port", 8080)
+func InItGin() {
+	port := app.Config.GetInt("app.port", 8080)
 	r.Run(fmt.Sprintf(":%v", port))
 }

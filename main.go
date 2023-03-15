@@ -5,7 +5,8 @@ import (
 )
 
 func main() {
-	bootstrap.SetUpDB()    // 初始化数据库
-	bootstrap.SetUpRoute() // 初始化路由
-	bootstrap.Start()      // 启动服务
+	bootstrap.InitConfig() // 初始化配置文件
+	bootstrap.InItDB()     // 初始化数据库连接
+	bootstrap.InitRoutes() // 初始化路由
+	bootstrap.InItGin()    // 初始化Gin
 }

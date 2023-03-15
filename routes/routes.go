@@ -15,11 +15,12 @@ func Register(r *gin.Engine) {
 			"msg": "notfound",
 		})
 	})
-	type controller struct {
-		Book *controllers.BookController
-		User *controllers.UserController
-	}
-	var c controller
+
+	var (
+		novelController = controllers.NovelController
+		userController  = controllers.UserController
+	)
+
 	jwt := middlewares.JwtMiddleware()
 	authz := middlewares.AuthzMiddleware()
 	r.POST("/login", jwt.LoginHandler) // 授权登录
@@ -31,17 +32,17 @@ func Register(r *gin.Engine) {
 	user := r.Group("/user")
 	user.Use(jwt.MiddlewareFunc())
 	{
-		user.GET("/hello", c.User.Hello)
+		user.GET("/hello", userController.Hello)
 	}
 
 	admin := r.Group("/admin")
 	admin.Use(authz)
 
-	book := r.Group("/book")
+	novel := r.Group("/novel")
 	{
-		book.GET("/book/:id", c.Book.Get)
-		book.PATCH("/book", c.Book.Update)
-		book.DELETE("/book/:id", c.Book.Delete)
-		book.POST("/books/create", c.Book.Create)
+		novel.GET("/:id", novelController.Get)
+		novel.PATCH("/:id", novelController.Update)
+		novel.DELETE("/:id", novelController.Delete)
+		novel.POST("", novelController.Create)
 	}
 }

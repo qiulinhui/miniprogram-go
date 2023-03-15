@@ -8,7 +8,7 @@ import (
 
 var r *gin.Engine
 
-func SetUpRoute() {
+func InitRoutes() {
 	r = gin.Default()
 	routes.Register(r)
 }

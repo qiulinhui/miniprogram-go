@@ -7,10 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
+type userController struct {
 }
 
-func (*UserController) Hello(c *gin.Context) {
+var UserController = newUserController()
+
+func newUserController() *userController {
+	return &userController{}
+}
+
+func (*userController) Hello(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	user, _ := c.Get("id")
 

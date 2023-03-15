@@ -1,6 +1,7 @@
 package models
 
 import (
+	"app/app"
 	"time"
 )
 
@@ -15,14 +16,14 @@ type User struct {
 }
 
 func (user *User) FindUserByOpenid(openid string) error {
-	return DB.Where("openid = ?", openid).First(&user).Error
+	return app.DB.Where("openid = ?", openid).First(&user).Error
 }
 
 func (user *User) Create() error {
-	return DB.Create(&user).Error
+	return app.DB.Create(&user).Error
 }
 
 func (user *User) UpdateSessionKey(sessionKey string) error {
 	user.SessionKey = sessionKey
-	return DB.Save(&user).Error
+	return app.DB.Save(&user).Error
 }

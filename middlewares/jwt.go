@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"app/config"
+	"app/app"
 	"app/models"
 	"app/pkg/wechat"
 	"log"
@@ -15,10 +15,10 @@ import (
 
 func JwtMiddleware() *jwt.GinJWTMiddleware {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:      config.GetString("jwt.realm"),       // 令牌作用域
-		Key:        []byte(config.GetString("jwt.key")), // 令牌签发密钥
-		Timeout:    time.Hour,                           // 令牌过期时间
-		MaxRefresh: time.Hour * (24*7 - 1),              // 令牌有效期刷新时间，令牌刷新的最大有效期是TokenTime + MaxRefresh
+		Realm:      app.Config.GetString("jwt.realm"),       // 令牌作用域
+		Key:        []byte(app.Config.GetString("jwt.key")), // 令牌签发密钥
+		Timeout:    time.Hour,                               // 令牌过期时间
+		MaxRefresh: time.Hour * (24*7 - 1),                  // 令牌有效期刷新时间，令牌刷新的最大有效期是TokenTime + MaxRefresh
 		// 回调函数，它应该根据登录信息对用户进行身份验证。
 		// 必须返回用户数据作为用户标识符，它将存储在Claim Array中。 必需的。
 		// 检查错误(e)以确定适当的错误消息。
@@ -30,7 +30,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 			user := new(models.User)
 			c.BindJSON(&params)
 
-			auth := wechat.WeChat.GetMiniProgram(wechat.MiniprogramCfg).GetAuth()
+			auth := wechat.GetWechat().GetMiniProgram(wechat.GetMiniprogramCfg()).GetAuth()
 			result, err := auth.Code2Session(params.Code)
 			if err != nil {
 				return nil, err
@@ -74,7 +74,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 				return nil
 			}
 			user := new(models.User)
-			if models.DB.First(&user, claims["id"]).Error != nil {
+			if app.DB.First(&user, claims["id"]).Error != nil {
 				return nil
 			}
 			return user
