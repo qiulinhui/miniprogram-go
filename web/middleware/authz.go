@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"app/app"
+	"app/repositories"
 	"log"
 
 	"github.com/casbin/casbin/v2"
@@ -13,7 +13,7 @@ import (
 )
 
 func AuthzMiddleware() gin.HandlerFunc {
-	adapter, err := gormadapter.NewAdapterByDB(app.DB)
+	adapter, err := gormadapter.NewAdapterByDB(repositories.NewRepository().DB)
 	if err != nil {
 		log.Fatalf("error: adapter: %s", err)
 	}

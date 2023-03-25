@@ -1,11 +1,6 @@
 package repositories
 
-import (
-	"app/app"
-	"app/models"
-
-	"gorm.io/gorm"
-)
+import "app/models"
 
 type NovelRepository interface {
 	FindById(id uint64) *models.Novel
@@ -16,12 +11,12 @@ type NovelRepository interface {
 }
 
 type novelRepository struct {
-	DB *gorm.DB
+	repository
 }
 
-func NewNovelRepository(DB *gorm.DB) NovelRepository {
+func NewNovelRepository() NovelRepository {
 	return &novelRepository{
-		DB: DB,
+		*NewRepository(),
 	}
 }
 
@@ -40,14 +35,14 @@ func (r *novelRepository) FindById(id uint64) *models.Novel {
 
 func (r *novelRepository) Create(novel *models.Novel) (*models.Novel, error) {
 
-	if err := app.DB.Create(&novel).Error; err != nil {
+	if err := r.DB.Create(&novel).Error; err != nil {
 		return nil, err
 	}
 	return novel, nil
 }
 
 func (r *novelRepository) Update(novel *models.Novel) (*models.Novel, error) {
-	if err := app.DB.Model(novel).Updates(novel); err != nil {
+	if err := r.DB.Model(novel).Updates(novel); err != nil {
 		return nil, err.Error
 	}
 	return novel, nil

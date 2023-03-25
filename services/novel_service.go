@@ -20,5 +20,6 @@ func NewNovelService(novelRepo repositories.NovelRepository) *novelSerivce {
 }
 
 func (s *novelSerivce) Get(id uint64) *models.Novel {
+	s.novelRepo.FindById(id)
 	return s.novelRepo.FindById(id)
 }

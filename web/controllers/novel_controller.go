@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"app/app"
 	"app/repositories"
 	"app/services"
 	"net/http"
@@ -15,7 +14,7 @@ type novelController struct {
 
 func NewNovelController() *novelController {
 	return &novelController{
-		novelService: services.NewNovelService(repositories.NewNovelRepository(app.DB)),
+		novelService: services.NewNovelService(repositories.NewNovelRepository()),
 	}
 }
 

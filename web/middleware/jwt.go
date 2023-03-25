@@ -4,6 +4,7 @@ import (
 	"app/app"
 	"app/models"
 	"app/pkg/wechat"
+	"app/repositories"
 	"log"
 	"net/http"
 	"strconv"
@@ -35,16 +36,16 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 			if err != nil {
 				return nil, err
 			}
-			err = user.FindUserByOpenid(result.OpenID)
+			err = repositories.NewUserRepository().FindUserByOpenid(result.OpenID)
 			if err != nil {
 				user.Openid = result.OpenID
 				user.SessionKey = result.SessionKey
-				err = user.Create()
+				err = repositories.NewUserRepository().Create()
 				if err != nil {
 					return nil, err
 				}
 			}
-			err = user.UpdateSessionKey(result.SessionKey)
+			err = repositories.NewUserRepository().UpdateSessionKey(result.SessionKey)
 			if err != nil {
 				return nil, err
 			}
@@ -74,7 +75,7 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 				return nil
 			}
 			user := new(models.User)
-			if app.DB.First(&user, claims["id"]).Error != nil {
+			if repositories.NewRepository().DB.First(&user, claims["id"]).Error != nil {
 				return nil
 			}
 			return user

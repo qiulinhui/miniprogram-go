@@ -1,4 +1,4 @@
-package bootstrap
+package repositories
 
 import (
 	"app/app"
@@ -9,7 +9,18 @@ import (
 	"gorm.io/gorm"
 )
 
-func InItDB() {
+type repository struct {
+	DB *gorm.DB
+}
+
+func NewRepository() *repository {
+	db := initMySQL()
+	return &repository{
+		DB: db,
+	}
+}
+
+func initMySQL() *gorm.DB {
 	var err error
 	// 建立数据库连接池
 	conf := mysql.New(mysql.Config{
@@ -37,5 +48,5 @@ func InItDB() {
 	sqlDB.SetMaxIdleConns(app.Config.GetInt("db.mysql.max_idle_connections"))
 	// 设置每个链接的过期时间
 	sqlDB.SetConnMaxLifetime(time.Duration(app.Config.GetInt("db.mysql.max_life_seconds")) * time.Second)
-	app.DB = db
+	return db
 }
