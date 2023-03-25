@@ -10,9 +10,7 @@ import (
 type userController struct {
 }
 
-var UserController = newUserController()
-
-func newUserController() *userController {
+func NewUserController() *userController {
 	return &userController{}
 }
 

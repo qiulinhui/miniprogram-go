@@ -16,11 +16,6 @@ func Register(r *gin.Engine) {
 		})
 	})
 
-	var (
-		novelController = controllers.NovelController
-		userController  = controllers.UserController
-	)
-
 	jwt := middleware.JwtMiddleware()
 	authz := middleware.AuthzMiddleware()
 	r.POST("/login", jwt.LoginHandler) // 授权登录
@@ -32,7 +27,7 @@ func Register(r *gin.Engine) {
 	user := r.Group("/user")
 	user.Use(jwt.MiddlewareFunc())
 	{
-		user.GET("/hello", userController.Hello)
+		user.GET("/hello", controllers.NewUserController().Hello)
 	}
 
 	admin := r.Group("/admin")
@@ -40,9 +35,9 @@ func Register(r *gin.Engine) {
 
 	novel := r.Group("/novel")
 	{
-		novel.GET("/:id", novelController.Get)
-		novel.PATCH("/:id", novelController.Update)
-		novel.DELETE("/:id", novelController.Delete)
-		novel.POST("", novelController.Create)
+		novel.GET("/:id", controllers.NewNovelController().Get)
+		// novel.PATCH("/:id", novelController.Update)
+		// novel.DELETE("/:id", novelController.Delete)
+		// novel.POST("", novelController.Create)
 	}
 }

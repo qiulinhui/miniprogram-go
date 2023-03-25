@@ -1,14 +1,14 @@
 package models
 
 type Novel struct {
-	ID        uint
-	Name      string
-	Author    string
-	Synopsis  string
-	Cover     string
-	Thumbnail string
-	WordCount string
-	CreatedAt int
-	UpdatedAt int
-	DeletedAt int
+	ID        uint64 `json:"id"`
+	Name      string `json:"name"`
+	Author    string `json:"author"`
+	Synopsis  string `json:"synopsis"`
+	Cover     string `json:"cover"`
+	Thumbnail string `json:"thumbnail"`
+	WordCount int    `json:"wordCount"`
+	CreatedAt int    `json:"createdAt"`
+	UpdatedAt int    `json:"updatedAt"`
+	DeletedAt int    `json:"deletedAt"`
 }

@@ -5,16 +5,20 @@ import (
 	"app/repositories"
 )
 
+type NovelService interface {
+	Get(uint64) *models.Novel
+}
+
 type novelSerivce struct {
+	novelRepo repositories.NovelRepository
 }
 
-var NovelSerivce = newNovelService()
-
-func newNovelService() *novelSerivce {
-	return &novelSerivce{}
+func NewNovelService(novelRepo repositories.NovelRepository) *novelSerivce {
+	return &novelSerivce{
+		novelRepo,
+	}
 }
 
-func (s *novelSerivce) Add(a int) {
-	novel := &models.Novel{}
-	repositories.NovelRepository.Create(novel)
+func (s *novelSerivce) Get(id uint64) *models.Novel {
+	return s.novelRepo.FindById(id)
 }
